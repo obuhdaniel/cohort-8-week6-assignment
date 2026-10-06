@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LoginCredentials, LoginService } from '../../services/login-service';
+import { firstValueFrom } from 'rxjs';
 import {
   email,
   form,
@@ -48,7 +49,9 @@ export class LoginForm {
   private readonly submitOptions: FormSubmitOptions<unknown, LoginData> = {
     action: async () => {
       try {
-        await this.loginService.login({ ...this.loginModel() });
+        await firstValueFrom(
+          this.loginService.loginWithObservable({ ...this.loginModel() }),
+        );
         this.submitted.set(true);
       } catch (error) {
         this.submissionError.set(
