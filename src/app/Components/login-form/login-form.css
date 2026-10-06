@@ -1,0 +1,39 @@
+.error-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.error-list li + li {
+  margin-top: 3px;
+}
+
+.field.invalid input {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(225, 77, 77, 0.12);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #3b4851;
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--teal);
+  margin: 0;
+}
+
+button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}

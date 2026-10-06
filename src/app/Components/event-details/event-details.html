@@ -1,0 +1,56 @@
+<section class="section">
+  <div class="container">
+    @if (event(); as current) {
+      <a class="btn btn-secondary" routerLink="/events">&larr; Back to events</a>
+
+      <div class="card event-card" style="margin-top: 22px">
+        <div class="event-img">{{ current.imageText }}</div>
+        <div class="event-body">
+          <span class="badge">{{ current.badge }}</span>
+          <h2 style="margin: 10px 0 0">{{ current.title }}</h2>
+
+          <div class="meta">
+            <span>{{ current.date }}</span>
+            <span>{{ current.venue }}</span>
+            <span>{{ current.duration }}</span>
+          </div>
+
+          @if (current.description) {
+            <p>{{ current.description }}</p>
+          }
+
+          @if (current.fee) {
+            <p>
+              Registration fee: <b>{{ current.fee }}</b>
+            </p>
+          }
+
+          <div class="actions" style="margin-top: 18px">
+            <a class="btn btn-primary" routerLink="/login">Register now</a>
+          </div>
+        </div>
+      </div>
+
+       @if (queryParams().length) {
+          <p>
+            /events/{{ current.id }}?<b>{{ queryString() }}</b>
+          </p>
+
+          
+          <div class="meta" style="margin: 12px 0">
+            @for (param of queryParams(); track param.key) {
+              <span class="badge">{{ param.key }} = {{ param.value }}</span>
+            }
+          </div>
+        }
+
+    
+    } @else if (notFound()) {
+      <div class="card">
+        <h2>Event not found</h2>
+        <p>That event does not exist or may have been removed.</p>
+        <a class="btn btn-primary" routerLink="/events">Back to events</a>
+      </div>
+    }
+  </div>
+</section>
