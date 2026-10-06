@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Subject } from 'rxjs/internal/Subject';
+import { BgcolorService } from '../../services/bgcolor-service';
 
 @Component({
   imports: [RouterLink],
@@ -10,19 +11,13 @@ import { Subject } from 'rxjs/internal/Subject';
   templateUrl: './navbar.html',
 })
 export class Navbar {
+  bgColorService = inject(BgcolorService);
 
-  selectedColor = 'blue';
-
-  //USING SUBJECTS, I DONT NEED TO PASS THE INITIAL VALUE OF THE COLOR, I CAN JUST SUBSCRIBE TO THE SUBJECT AND GET THE LATEST VALUE
-  colorSubject = new Subject<string>();
-
-  //USING BEHAVIOR SUBJECTS, I NEED TO PASS THE INITIAL VALUE OF THE COLOR, SO THAT WHEN I SUBSCRIBE TO THE SUBJECT, I GET THE LATEST VALUE
-  colorSubjectBehavior = new BehaviorSubject<string>(this.selectedColor); 
-
-  changeColor(color: string) {
-    this.selectedColor = color;
-    this.colorSubject.next(color);
-
-    console.log(`Color changed to: ${color}`);
+  handleSelectionChange(event: any) {
+    event.preventDefault();
+    console.log('Selection changed:', event.target.value);
+     
+    this.bgColorService.changeColor(event.target.value);
   }
+  
 }

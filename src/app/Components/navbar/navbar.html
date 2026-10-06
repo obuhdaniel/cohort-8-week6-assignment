@@ -20,11 +20,11 @@
         <div class="actions">
             <label class="color-picker">
                 <span>Color</span>
-                <select #colorSelect aria-label="Choose a color" (change)="changeColor(colorSelect.value)">
-                    <option value="blue" [selected]="selectedColor === 'blue'">Blue</option>
-                    <option value="yellow" [selected]="selectedColor === 'yellow'">Yellow</option>
-                    <option value="red" [selected]="selectedColor === 'red'">Red</option>
-                    <option value="black" [selected]="selectedColor === 'black'">Black</option>
+                <select (change)="handleSelectionChange($event)">
+                    <option value="blue" >Blue</option>
+                    <option value="yellow" >Yellow</option>
+                    <option value="red" >Red</option>
+                    <option value="black" >Black</option>
                 </select>
 
             </label>

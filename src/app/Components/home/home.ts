@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Navbar } from '../navbar/navbar';
 import { NgStyle } from '@angular/common';
+import { BgcolorService } from '../../services/bgcolor-service';
 
 @Component({
   imports: [NgStyle],
@@ -14,18 +15,17 @@ export class Home implements OnInit {
 
   constructor( private navbar: Navbar) {}
 
+  bgColorService = inject(BgcolorService);  
+
 
   componentName = signal<string>('Home Component');
 
   ngOnInit() {
     //SUBSCRIBE TO THE SUBJECT IN THE NAVBAR COMPONENT AND GET THE LATEST VALUE OF THE COLOR
-    this.navbar.colorSubject.subscribe((color: string) => {
+
+    this.bgColorService.colorSubject.subscribe((color: string) => {
       this.backgroundColor = color;
     });
-
-    //SUBSCRIBE TO THE BEHAVIOR SUBJECT IN THE NAVBAR COMPONENT AND GET THE LATEST VALUE OF THE COLOR
-    // this.navbar.colorSubjectBehavior.subscribe((color: string) => {
-    //   this.backgroundColor = color;
-    // });
+   
   }
 }
