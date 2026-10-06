@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LoginCredentials, LoginService } from '../../services/login-service';
 import {
   email,
   form,
@@ -14,21 +15,17 @@ import {
   submit,
 } from '@angular/forms/signals';
 
-export interface LoginData {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
-const AUTH_LATENCY_MS = 700;
+export type LoginData = LoginCredentials;
 
 @Component({
   imports: [FormField, RouterLink],
   selector: 'app-login-form',
-  styleUrls: ['../../app.css', './login-form.css'],
+  styleUrl: './login-form.css',
   templateUrl: './login-form.html',
 })
 export class LoginForm {
+  private readonly loginService = inject(LoginService);
+
   readonly loginModel = signal<LoginData>({
     email: '',
     password: '',
@@ -38,6 +35,7 @@ export class LoginForm {
   readonly loginForm = form(this.loginModel, this.validations);
 
   readonly submitted = signal(false);
+  readonly submissionError = signal('');
 
   readonly showEmailError = computed(
     () => this.loginForm.email().touched() && this.loginForm.email().invalid(),
@@ -49,12 +47,19 @@ export class LoginForm {
 
   private readonly submitOptions: FormSubmitOptions<unknown, LoginData> = {
     action: async () => {
-      await new Promise((resolve) => setTimeout(resolve, AUTH_LATENCY_MS));
-      this.submitted.set(true);
+      try {
+        await this.loginService.login({ ...this.loginModel() });
+        this.submitted.set(true);
+      } catch (error) {
+        this.submissionError.set(
+          error instanceof Error ? error.message : 'Login failed. Please try again.',
+        );
+      }
       return undefined;
     },
     onInvalid: () => {
       this.submitted.set(false);
+      this.submissionError.set('Please correct the highlighted fields.');
     },
   };
 
@@ -73,6 +78,7 @@ export class LoginForm {
   async onSubmit(event: Event): Promise<void> {
     event.preventDefault();
     this.submitted.set(false);
+    this.submissionError.set('');
     await submit(this.loginForm, this.submitOptions);
   }
 }
